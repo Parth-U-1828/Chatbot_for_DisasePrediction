@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot for Disease Prediction - Sign Up</title>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --success: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f0f2f5;
+            color: var(--dark);
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .logo i {
+            font-size: 28px;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 30px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .card h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--light-gray);
+            border-radius: 6px;
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.2);
+        }
+
+        .form-group input.error {
+            border-color: red;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .password-requirements {
+            color: var(--gray);
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        .btn-primary:disabled {
+            background-color: var(--light-gray);
+            cursor: not-allowed;
+        }
+
+        .login-link {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .login-link a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        .flash-container {
+            margin-bottom: 20px;
+        }
+
+        .flash {
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .flash.success {
+            background-color: #d1fadf;
+            color: #0f5132;
+            border: 1px solid #a3cfbb;
+        }
+
+        .flash.error {
+            background-color: #f8d7da;
+            color: #842029;
+            border: 1px solid #f5c2c7;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <i class="fas fa-heartbeat"></i>
+            <span>Chatbot for Disease Prediction</span>
+        </div>
+
+        <div class="flash-container">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="flash {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+
+        <div class="card">
+            <h2>Create Account</h2>
+            <form id="signupForm" action="{{ url_for('signup') }}" method="post">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                    <div id="usernameError" class="error-message">Username must contain only letters</div>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                    <div id="passwordError" class="error-message">Password must meet all requirements</div>
+                    <div class="password-requirements">
+                        Password requirements:
+                        <ul>
+                            <li id="lengthReq">At least 8 characters long</li>
+                            <li id="alphaReq">Contains at least one letter</li>
+                            <li id="numberReq">Contains at least one number</li>
+                            <li id="specialReq">Contains at least one special character</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="confirm_password">Confirm Password</label>
+                    <input type="password" id="confirm_password" name="confirm_password" required>
+                    <div id="confirmPasswordError" class="error-message">Passwords do not match</div>
+                </div>
+                <button type="submit" id="submitBtn" class="btn btn-primary" disabled>Sign Up</button>
+            </form>
+            <div class="login-link">
+                Already have an account? <a href="{{ url_for('login') }}">Login</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get form elements
+        const form = document.getElementById('signupForm');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirm_password');
+        const usernameError = document.getElementById('usernameError');
+        const passwordError = document.getElementById('passwordError');
+        const confirmPasswordError = document.getElementById('confirmPasswordError');
+        const submitBtn = document.getElementById('submitBtn');
+
+        // Password requirement elements
+        const lengthReq = document.getElementById('lengthReq');
+        const alphaReq = document.getElementById('alphaReq');
+        const numberReq = document.getElementById('numberReq');
+        const specialReq = document.getElementById('specialReq');
+
+        // Username validation function
+        function validateUsername() {
+            const username = usernameInput.value;
+            // Check if username contains only letters
+            const usernameRegex = /^[A-Za-z]+$/;
+            const isValid = usernameRegex.test(username);
+
+            if (!isValid) {
+                usernameInput.classList.add('error');
+                usernameError.style.display = 'block';
+            } else {
+                usernameInput.classList.remove('error');
+                usernameError.style.display = 'none';
+            }
+
+            return isValid;
+        }
+
+        // Password validation function
+        function validatePassword() {
+            const password = passwordInput.value;
+            
+            // Check password length
+            const isLongEnough = password.length >= 8;
+            lengthReq.style.color = isLongEnough ? 'green' : 'red';
+
+            // Check for at least one letter
+            const hasLetter = /[A-Za-z]/.test(password);
+            alphaReq.style.color = hasLetter ? 'green' : 'red';
+
+            // Check for at least one number
+            const hasNumber = /[0-9]/.test(password);
+            numberReq.style.color = hasNumber ? 'green' : 'red';
+
+            // Check for at least one special character
+            const hasSpecialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
+            specialReq.style.color = hasSpecialChar ? 'green' : 'red';
+
+            // Overall password validity
+            const isValid = isLongEnough && hasLetter && hasNumber && hasSpecialChar;
+
+            if (!isValid) {
+                passwordInput.classList.add('error');
+                passwordError.style.display = 'block';
+            } else {
+                passwordInput.classList.remove('error');
+                passwordError.style.display = 'none';
+            }
+
+            return isValid;
+        }
+
+        // Confirm password validation function
+        function validateConfirmPassword() {
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+            const isValid = password === confirmPassword && confirmPassword.length > 0;
+
+            if (!isValid) {
+                confirmPasswordInput.classList.add('error');
+                confirmPasswordError.style.display = 'block';
+            } else {
+                confirmPasswordInput.classList.remove('error');
+                confirmPasswordError.style.display = 'none';
+            }
+
+            return isValid;
+        }
+
+        // Enable/disable submit button based on validation
+        function validateForm() {
+            const isUsernameValid = validateUsername();
+            const isPasswordValid = validatePassword();
+            const isConfirmPasswordValid = validateConfirmPassword();
+
+            // Enable submit button only if all fields are valid
+            submitBtn.disabled = !(isUsernameValid && isPasswordValid && isConfirmPasswordValid);
+        }
+
+        // Add event listeners for real-time validation
+        usernameInput.addEventListener('input', validateForm);
+        passwordInput.addEventListener('input', function() {
+            validatePassword();
+            validateConfirmPassword();
+            validateForm();
+        });
+        confirmPasswordInput.addEventListener('input', function() {
+            validateConfirmPassword();
+            validateForm();
+        });
+
+        // Prevent form submission if validation fails
+        form.addEventListener('submit', function(event) {
+            if (!validateUsername() || !validatePassword() || !validateConfirmPassword()) {
+                event.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>
